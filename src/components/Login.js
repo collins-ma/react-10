@@ -4,7 +4,8 @@ import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 
-const LOGIN_URL = 'https://nest-2.onrender.com/auth/login'
+const LOGIN_URL = 'https://grand-dasik-32fa89.netlify.app/auth/login'
+
 
 
 
