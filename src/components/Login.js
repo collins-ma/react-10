@@ -1,23 +1,17 @@
 import { useRef, useState, useEffect } from 'react';
-import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-
-const LOGIN_URL = 'https://grand-dasik-32fa89.netlify.app/auth/login'
-
-
-
-
-
-
+// Hardcoded users array (In real-world use, you'd call an API or database)
+const users = [
+  { username: 'john', password: '1234' },
+  { username: 'jane', password: '5678' },
+  { username: 'admin', password: 'admin123' },
+];
 
 const Login = () => {
     const { setAuth } = useAuth();
-
     const navigate = useNavigate();
-    const location = useLocation();
-    // const from = location.state?.from?.pathname || "/";
 
     const userRef = useRef();
     const errRef = useRef();
@@ -28,47 +22,37 @@ const Login = () => {
 
     useEffect(() => {
         userRef.current.focus();
-    }, [])
+    }, []);
 
     useEffect(() => {
         setErrMsg('');
-    }, [username, password])
+    }, [username, password]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify({ username, password }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
-            console.log(JSON.stringify(response?.data));
-            //console.log(JSON.stringify(response));
-            const accessToken = response?.data?.accessToken;
-            
-            setAuth({   accessToken });
-            setUserName('');
-            setPassword('');
-            navigate('/home');
-        } catch (err) {
-            if (!err?.response) {
-                setErrMsg('No Server Response');
-            } else if (err.response?.status === 400) {
-                setErrMsg('Missing Username or Password');
-            } else if (err.response?.status === 401) {
-                setErrMsg('Unauthorized');
+        // Check if the user exists in the hardcoded users array
+        const foundUser = users.find(user => user.username === username);
+
+        if (foundUser) {
+            // Compare passwords
+            if (foundUser.password === password) {
+                // Password matches, navigate to home page
+                setAuth({ accessToken: 'hardcodedToken' }); // Mocked token
+                setUserName('');
+                setPassword('');
+                navigate('/home');
             } else {
-                setErrMsg('Login Failed');
+                setErrMsg('Incorrect password');
+                errRef.current.focus();
             }
+        } else {
+            setErrMsg('User not found');
             errRef.current.focus();
         }
-    }
+    };
 
     return (
-
         <section>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Sign In</h1>
@@ -101,8 +85,7 @@ const Login = () => {
                 </span>
             </p>
         </section>
+    );
+};
 
-    )
-}
-
-export default Login
+export default Login;
