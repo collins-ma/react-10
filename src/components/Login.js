@@ -4,8 +4,8 @@ import useAuth from '../hooks/useAuth';
 
 // Hardcoded users array (In real-world use, you'd call an API or database)
 const users = [
-  { username: 'john', password: '1234' },
-  { username: 'jane', password: '5678' },
+  { username: 'collins', password: 'collo254' },
+  { username: 'Rodriguez', password: 'rodri254' },
   { username: 'admin', password: 'admin123' },
 ];
 
