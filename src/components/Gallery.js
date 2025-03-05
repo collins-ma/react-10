@@ -1,5 +1,5 @@
 import React from 'react';
-import './Gallery.css';  // Importing the traditional CSS file
+
 
 const Gallery = () => {
   return (
